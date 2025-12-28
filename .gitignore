@@ -1,0 +1,75 @@
+# Frontend
+frontend/.next
+frontend/node_modules
+frontend/.env.local
+frontend/.env.production
+frontend/out
+
+# Backend
+backend/venv
+backend/.venv
+backend/__pycache__
+backend/**/__pycache__
+backend/.env
+backend/logs/*.log
+backend/app/__pycache__
+
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Monitoring
+monitoring/prometheus/data/
+monitoring/grafana/data/
+
+# Model files (if too large for git)
+# backend/model/*.pth
+ml src/best_multimodal_hqcnn.pth
+backend/model/best_multimodal_hqcnn.pth
+
+# Temporary files
+*.tmp
+*.bak
+.cache/
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+ml_src/.ipynb_checkpoints/
+
+# Data files
+data/
+*.csv
+*.json.gz
+
+# OS
+Thumbs.db
+.DS_Store
