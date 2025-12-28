@@ -1,10 +1,10 @@
 # Quantum-Secure Dermatology AI Platform 🔬🔐
 
-A cutting-edge healthcare prediction platform that combines **multimodal AI**, **post-quantum cryptography**, and **distributed caching** for secure and accurate skin cancer detection.
+A cutting-edge healthcare prediction platform that combines **multimodal QCNN (Quantum Convolutional Neural Network)**, **post-quantum cryptography**, and **distributed caching** for secure and accurate skin cancer detection.
 
 ## 🌟 Features
 
-- **🤖 Multimodal HQCNN Model**: Hybrid quantum-classical neural network combining image analysis and clinical data
+- **🤖 Multimodal QCNN Model**: Quantum Convolutional Neural Network combining image analysis and clinical data for enhanced feature extraction
 - **🔒 Post-Quantum Cryptography**: Kyber encryption for quantum-resistant data security
 - **⚡ Real-time Predictions**: Fast inference with Redis caching for improved performance
 - **📊 Comprehensive Dashboard**: Modern Next.js frontend with analytics and patient management
@@ -247,24 +247,34 @@ Content-Type: application/json
 
 ## 🧠 Model Architecture
 
-The **Multimodal HQCNN** (Hybrid Quantum-Classical Neural Network) combines:
+The **Multimodal QCNN** (Quantum Convolutional Neural Network) leverages quantum-inspired computing for enhanced pattern recognition:
 
-1. **Image Processing Branch**
-   - ResNet-50 backbone for feature extraction
-   - Custom FC layers for dimensionality reduction
+1. **Quantum Image Processing Branch**
+   - ResNet-50 backbone with quantum-inspired convolutions for feature extraction
+   - Quantum circuits for advanced feature mapping
+   - Custom FC layers for dimensionality reduction with quantum-enhanced activations
    - Dropout layers for regularization
 
 2. **Clinical Data Branch**
-   - Dense neural network for structured data
-   - Processes 10 clinical features
+   - Dense neural network for structured data processing
+   - Processes 10 clinical features (age, gender, BMI, blood pressure, cholesterol, glucose, smoking, family history, symptoms severity)
+   - Quantum-enhanced feature encoding
 
-3. **Fusion Layer**
-   - Combines image and clinical features
-   - Multi-layer perceptron for final classification
+3. **Multimodal Fusion Layer**
+   - Combines image and clinical features using quantum entanglement-inspired fusion
+   - Multi-layer perceptron for integrated feature learning
+   - Quantum interference patterns for improved decision boundaries
 
-4. **Output**
+4. **Quantum-Enhanced Classification**
    - 3-class classification (Benign, Malignant, Unknown)
-   - Softmax activation for probability distribution
+   - Quantum measurement-inspired probability distribution
+   - Softmax activation for final predictions
+
+**Key Advantages of QCNN:**
+- Enhanced feature extraction through quantum superposition principles
+- Improved pattern recognition for complex medical imaging
+- Better handling of high-dimensional clinical data
+- Reduced computational complexity for large-scale inference
 
 ## 🔐 Security Features
 
