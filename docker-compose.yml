@@ -1,0 +1,151 @@
+services:
+  # MongoDB Service
+  mongodb:
+    image: mongo:7.0
+    container_name: healthcare_mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: healthcare_admin_pass
+      MONGO_INITDB_DATABASE: healthcare_db
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - healthcare_network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis Service
+  redis:
+    image: redis:7.2-alpine
+    container_name: healthcare_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass healthcare_redis_pass
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - healthcare_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # FastAPI Application Service
+  healthcare_app:
+    build:
+      context: ./project
+      dockerfile: Dockerfile
+    container_name: healthcare_app
+    restart: unless-stopped
+    environment:
+      # Database Configuration
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
+      MONGO_DB: healthcare_db
+      MONGO_USERNAME: healthcare_user
+      MONGO_PASSWORD: healthcare_user_pass
+      MONGO_AUTH_DB: healthcare_db
+      
+      # Cache Configuration
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      REDIS_PASSWORD: healthcare_redis_pass
+      
+      # Cache TTL Settings (in seconds)
+      CACHE_DEFAULT_TTL: 3600
+      CACHE_PREDICTION_TTL: 1800
+      CACHE_HEALTH_RECORD_TTL: 7200
+      
+      # Application Configuration
+      PYTHONPATH: /app
+      ENVIRONMENT: production
+      LOG_LEVEL: INFO
+      
+      # Security Settings
+      SECRET_KEY: your-secret-key-change-this-in-production
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      
+    ports:
+      - "8001:8000"
+    volumes:
+      - "./project/model:/app/model:ro"  # Mount model files as read-only
+      - "./project/logs:/app/logs"       # Mount logs directory
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - healthcare_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # MongoDB Express (Optional - for database management)
+  mongo-express:
+    image: mongo-express:1.0
+    container_name: healthcare_mongo_express
+    restart: unless-stopped
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: healthcare_admin_pass
+      ME_CONFIG_MONGODB_URL: mongodb://admin:healthcare_admin_pass@mongodb:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
+    networks:
+      - healthcare_network
+    profiles:
+      - debug  # Only start with --profile debug
+
+  # Redis Commander (Optional - for cache management)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: healthcare_redis_commander
+    restart: unless-stopped
+    environment:
+      REDIS_HOSTS: local:redis:6379:0:healthcare_redis_pass
+      HTTP_USER: admin
+      HTTP_PASSWORD: admin
+    ports:
+      - "8082:8081"
+    depends_on:
+      - redis
+    networks:
+      - healthcare_network
+    profiles:
+      - debug  # Only start with --profile debug
+
+# Named volumes for data persistence
+volumes:
+  mongodb_data:
+    driver: local
+  redis_data:
+    driver: local
+
+# Custom network for service communication
+networks:
+  healthcare_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
