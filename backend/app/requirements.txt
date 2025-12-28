@@ -1,0 +1,38 @@
+# FastAPI and web framework dependencies
+fastapi>=0.100.0
+uvicorn[standard]>=0.20.0
+python-multipart>=0.0.6
+pydantic>=2.0.0
+
+# Database dependencies
+pymongo>=4.0.0
+certifi>=2023.0.0
+
+# Cache dependencies  
+redis>=4.0.0
+hiredis>=2.0.0
+
+# Machine Learning dependencies
+torch>=2.0.0
+torchvision>=0.15.0
+numpy>=1.21.0
+Pillow>=9.0.0
+scikit-learn>=1.2.0
+
+# Cryptography dependencies
+cryptography>=40.0.0
+pycryptodome>=3.15.0
+
+# HTTP and networking
+httpx==0.25.2
+requests==2.31.0
+
+# Monitoring and metrics
+prometheus-client==0.17.1
+prometheus-fastapi-instrumentator==6.1.0
+psutil==5.9.6
+APScheduler==3.10.4
+
+# Development and testing dependencies
+pytest==7.4.3
+pytest-asyncio==0.21.1
